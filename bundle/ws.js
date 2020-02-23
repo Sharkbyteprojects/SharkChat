@@ -33,7 +33,6 @@ function reconn() {
     conn = false;
     reconn();
   };
-  setInterval(()=>{connection.send({"action": "online"})},9000);
   connection.onmessage = function(e) {
     console.log("Incoming Message: " + e.data);
 
