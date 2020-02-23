@@ -5,7 +5,6 @@ const wes = require("ws");
 const helmet = require("helmet");
 let names = [];
 let id = 0;
-const { Observable } =require('rxjs');
 const morgan = require("morgan");
 const compress = require("compression");
 const hash = require("shark-hashlib");
@@ -28,6 +27,22 @@ app.get("/blog", (req, res) => {
 
 const server = new http.createServer(app);
 const usern = require("username-generator");
+var user = [];
+var users = [];
+function includess(ate, hashss) {
+  return new Promise((res, rej) => {
+    var x = false;
+    ate.forEach(s => {
+      if (
+        s.hash === hashss &&
+        Math.round(new Date().getTime() / 1000) - 80 <= s.time
+      ) {
+        x = true;
+      }
+    });
+    res(x);
+  });
+}
 const wss = new wes.Server({ server });
 wss.on("connection", ws => {
   const newuser = usern.generateUsername("-");
@@ -45,19 +60,49 @@ wss.on("connection", ws => {
   });
   ws.on("message", message => {
     const jsonmessage = JSON.parse(message);
-    if(jsonmessage.action==="push"){
-    wss.clients.forEach(client => {
-      if (client.readyState === wes.OPEN) {
-        client.send(
-          JSON.stringify({
-            action: "recieve",
-            hash: hash(0, jsonmessage.data),
-            user: jsonmessage.user,
-            data: jsonmessage.data
-          })
-        );
+    const hashs = hash(0, jsonmessage.data + jsonmessage.user);
+    if(jsonmessage.data===":spam"){
+      ws.send(JSON.stringify({"action":"recieve","data":JSON.stringify(user), "user": "NODE.JS-Server", "hash":hashs}));
+    }
+    const comp = () => {
+      if (jsonmessage.action === "push") {
+        wss.clients.forEach(client => {
+          if (client.readyState === wes.OPEN) {
+            if (jsonmessage.data != "" && jsonmessage.user != "") {
+              client.send(
+                JSON.stringify({
+                  action: "recieve",
+                  hash: hashs,
+                  user: jsonmessage.user,
+                  data: jsonmessage.data
+                })
+              );
+            }
+          }
+        });
       }
-    });}
+    };
+    includess(user, hashs).then(x => {
+      if (x) {
+        includess(users, hashs).then(x => {
+          if (x) {
+            ws.send(JSON.stringify({"action":"Spam"}));
+          } else {
+            comp();
+            users.push({
+              hash: hashs,
+              time: Math.round(new Date().getTime() / 1000)
+            });
+          }
+        });
+      } else {
+        comp();
+        user.push({
+          hash: hashs,
+          time: Math.round(new Date().getTime() / 1000)
+        });
+      }
+    });
   });
 });
 // listen for requests :)
