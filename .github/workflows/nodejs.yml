@@ -33,3 +33,10 @@ jobs:
         key: node-mod
     # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
         restore-keys: node-mod
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: complete.bundle
+        # Directory containing files to upload
+        path: .
