@@ -6,6 +6,7 @@ html(lang="en")
     title SharkChat
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(href="/bootstrap.css" rel="stylesheet")
+    link(href="/style.css" rel="stylesheet")
   body
     nav.navbar.navbar-expand-sm.justify-content-center.bg-primary.navbar-dark
       div.container
@@ -22,7 +23,7 @@ html(lang="en")
     div.container.alert.alert-success#okmessage(style="display:none")
       strong You're connected!
     h3.container#userid.alert.alert-dark Loading
-    div#msgs(style="height:calc(30vh); width: calc(100vw - 80px);overflow:scroll;").container
+    div#msgs.container
     form(action="#").container.form-group#formdsj
       label(for="xy") Your Message:
       input(type="text" name="xy" placeholder="message").form-control#inputmsg

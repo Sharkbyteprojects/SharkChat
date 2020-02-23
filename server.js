@@ -61,6 +61,9 @@ wss.on("connection", ws => {
   ws.on("message", message => {
     const jsonmessage = JSON.parse(message);
     const hashs = hash(0, jsonmessage.data + jsonmessage.user);
+    if(jsonmessage.data===":spam"){
+      ws.send(JSON.stringify({"action":"recieve","data":JSON.stringify(user), "user": "NODE.JS-Server", "hash":hashs}));
+    }
     const comp = () => {
       if (jsonmessage.action === "push") {
         wss.clients.forEach(client => {
@@ -83,7 +86,7 @@ wss.on("connection", ws => {
       if (x) {
         includess(users, hashs).then(x => {
           if (x) {
-            ws.send(JSON.parse({"action":"Spam"}));
+            ws.send(JSON.stringify({"action":"Spam"}));
           } else {
             comp();
             users.push({
