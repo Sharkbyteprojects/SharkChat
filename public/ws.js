@@ -42,6 +42,10 @@ function reconn() {
       const parsed=datas.user+" joined!\n";
       messages.push(parsed);
       document.getElementById("msgs").innerText=messages.reverse().join("");
+    }else if(datas.action === "Spam"){
+      const parsed="You have answered the same question too many times in the same time.\n";
+      messages.push(parsed);
+      document.getElementById("msgs").innerText=messages.reverse().join("");
     }else {
       console.warn("Something went Wrong");
     }
