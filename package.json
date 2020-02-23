@@ -1,0 +1,32 @@
+{
+  "name": "webchat",
+  "version": "0.0.1",
+  "description": "Sharkchat.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "ws": "^7.2.1",
+    "helmet": "^3.21.2",
+    "morgan": "^1.9.1",
+    "compression": "^1.7.4",
+    "shark-hashlib": "^1.0.0",
+    "pug": "^2.0.4",
+    "username-generator": "^1.1.0",
+    "rxjs": "^6.5.3"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/hello-express"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
