@@ -5,7 +5,6 @@ const wes = require("ws");
 const helmet = require("helmet");
 let names = [];
 let id = 0;
-const { Observable } =require('rxjs');
 const morgan = require("morgan");
 const compress = require("compression");
 const hash = require("shark-hashlib");
@@ -28,6 +27,8 @@ app.get("/blog", (req, res) => {
 
 const server = new http.createServer(app);
 const usern = require("username-generator");
+var user = [];
+var users = [];
 const wss = new wes.Server({ server });
 wss.on("connection", ws => {
   const newuser = usern.generateUsername("-");
@@ -45,19 +46,48 @@ wss.on("connection", ws => {
   });
   ws.on("message", message => {
     const jsonmessage = JSON.parse(message);
-    if(jsonmessage.action==="push"){
-    wss.clients.forEach(client => {
-      if (client.readyState === wes.OPEN) {
-        client.send(
-          JSON.stringify({
-            action: "recieve",
-            hash: hash(0, jsonmessage.data),
-            user: jsonmessage.user,
-            data: jsonmessage.data
-          })
-        );
+    const hashs = hash(0, jsonmessage.data + jsonmessage.user);
+    console.log(Math.round(new Date().getTime()/1000));//80
+    if (user.includes(hashs)) {
+      if (users.includes(hashs)) {
+      } else {
+        users.push(hashs);
+        if (jsonmessage.action === "push") {
+          wss.clients.forEach(client => {
+            if (client.readyState === wes.OPEN) {
+              if (jsonmessage.data != "" && jsonmessage.user != "") {
+                client.send(
+                  JSON.stringify({
+                    action: "recieve",
+                    hash: hashs,
+                    user: jsonmessage.user,
+                    data: jsonmessage.data
+                  })
+                );
+              }
+            }
+          });
+        }
       }
-    });}
+    } else {
+      user.push(hashs);
+      if (jsonmessage.action === "push") {
+        wss.clients.forEach(client => {
+          if (client.readyState === wes.OPEN) {
+            if (jsonmessage.data != "" && jsonmessage.user != "") {
+              client.send(
+                JSON.stringify({
+                  action: "recieve",
+                  hash: hashs,
+                  user: jsonmessage.user,
+                  data: jsonmessage.data
+                })
+              );
+            }
+          }
+        });
+      }
+    }
   });
 });
 // listen for requests :)
