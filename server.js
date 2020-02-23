@@ -61,11 +61,12 @@ wss.on("connection", ws => {
   ws.on("message", message => {
     const jsonmessage = JSON.parse(message);
     const hashs = hash(0, jsonmessage.data + jsonmessage.user);
+    if (jsonmessage.action === "push") {
     if(jsonmessage.data===":spam"){
       ws.send(JSON.stringify({"action":"recieve","data":JSON.stringify(user), "user": "NODE.JS-Server", "hash":hashs}));
     }
     const comp = () => {
-      if (jsonmessage.action === "push") {
+      
         wss.clients.forEach(client => {
           if (client.readyState === wes.OPEN) {
             if (jsonmessage.data != "" && jsonmessage.user != "") {
@@ -80,7 +81,7 @@ wss.on("connection", ws => {
             }
           }
         });
-      }
+      
     };
     includess(user, hashs).then(x => {
       if (x) {
@@ -102,7 +103,7 @@ wss.on("connection", ws => {
           time: Math.round(new Date().getTime() / 1000)
         });
       }
-    });
+    });}
   });
 });
 // listen for requests :)
