@@ -4,7 +4,7 @@
   "description": "",
   "main": "ws.js",
   "scripts": {
-    "test": "webpack&&node move.js"
+    "test": "webpack&&node move.js&&node move.bundle.js"
   },
   "keywords": [],
   "author": "Sharkbyte",
