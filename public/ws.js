@@ -6,7 +6,6 @@ var head =
   '<table class="table table-hover"><thead><tr><th>user</th><th>message</th></tr></thead><tbody>';
 var end = "</tbody></table>";
 var username = "";
-
 var cleanseString = function cleanseString(string) {
   return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
@@ -42,7 +41,12 @@ function reconn() {
       document.getElementById("errormessage").style = "display:none";
       document.getElementById("okmessage").style = "display:block";
       console.info("Connected");
-      username = datas.data;
+      if (cookes.search("username") === "") {
+        username = datas.data;
+        cookes.add("username", username);
+      } else {
+        username = cookes.search("username");
+      }
 
       document.getElementById("formdsj").onsubmit = function() {
         var valumse = document.getElementById("inputmsg").value;
@@ -64,8 +68,11 @@ function reconn() {
       document.getElementById("userid").innerText =
         "Your Username:\n" + username;
     } else if (datas.action === "recieve") {
+      var colorxs = userrgb(datas.user);
       var parsed =
-        "<tr><td>" +
+        '<tr style="' +
+        colorxs +
+        '"><td>' +
         cleanseString(datas.user) +
         "</td><td>" +
         cleanseString(datas.data) +
@@ -85,7 +92,7 @@ function reconn() {
       document.getElementById("msgs").innerHTML = head + _clone.join("") + end;
     } else if (datas.action === "Spam") {
       var _parsed2 =
-        '<tr class="serverspama"><td>Server</td><td>She sent the same one too many times. To avoid spam, your message was not sent.</td></tr>';
+        '<tr class="serverspama"><td>Server</td><td>You sent the same message too many times. To avoid spam, your message was not sent.</td></tr>';
       messages.push(_parsed2);
       var _clone2 = messages;
       document.getElementById("msgs").innerHTML = head + _clone2.join("") + end;
