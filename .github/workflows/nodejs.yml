@@ -17,9 +17,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd bundle
-    - run: npm install
-    - run: npm test
+    - run: cd bundle&&npm install
+    - run: cd bundle&&npm test
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
