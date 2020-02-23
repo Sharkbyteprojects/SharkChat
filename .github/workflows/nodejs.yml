@@ -24,3 +24,12 @@ jobs:
       with:
         name: Bundle
         path: ./bundle/dist/ws.bundle.js
+    - name: Cache
+      uses: actions/cache@v1.1.2
+      with:
+         # A directory to store and save the cache
+        path: ./bundle/node_modules
+      # An explicit key for restoring and saving the cache
+        key: node-mod
+    # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
+        restore-keys: node-mod
