@@ -23,7 +23,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: Bundle
-        path: ./bundle/dist/ws.bundle.js
+        path: ./bundle/dist/
     - name: Cache
       uses: actions/cache@v1.1.2
       with:
